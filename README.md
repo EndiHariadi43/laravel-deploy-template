@@ -23,7 +23,7 @@ A production-friendly **Lite** CI for Laravel. Upgrade to **Premium** for deploy
 
 **Get Premium:**
 - **GitHub Sponsors → https://github.com/sponsors/EndiHariadi43** (request access)
-- or buy at Gumroad → [https://gumroad.com/premium_laravel](https://mintyendi.gumroad.com/l/premium_laravel)
+- or buy at Gumroad → [[https://gumroad.com/premium_laravel](https://mintyendi.gumroad.com/l/premium_laravel)
 
 
 ## 🔐 Required Secrets (Premium)
