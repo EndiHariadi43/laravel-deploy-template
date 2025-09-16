@@ -1,9 +1,9 @@
 name: Feature request
 labels: [enhancement]
 body:
-- type: textarea
-id: need
-attributes:
-label: What problem are you solving?
-validations:
-required: true
+  - type: textarea
+    id: need
+    attributes:
+      label: What problem are you solving?
+    validations:
+      required: true
