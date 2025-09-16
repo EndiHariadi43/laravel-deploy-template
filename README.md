@@ -46,3 +46,8 @@ Click **Use this template** to bootstrap your repo.
 
 ## 📝 License
 Apache-2.0 © 2025 Endi Hariadi
+
+---
+
+[Get Laravel Deploy Premium](https://mintyendi.gumroad.com/l/laravel-deploy-premium)
+
