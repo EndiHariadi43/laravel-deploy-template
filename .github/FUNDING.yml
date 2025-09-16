@@ -1,3 +1,5 @@
-# These are supported funding model platforms
-
-github: EndiHariadi43
+github: [EndiHariadi43]
+custom: ["https://github.com/sponsors/EndiHariadi43", "https://saweria.co/EndiHariadi43"]
+```yml
+github: [EndiHariadi43]
+custom: ["https://github.com/sponsors/EndiHariadi43", "https://gumroad.com/your-product", "https://saweria.co/EndiHariadi43"]
