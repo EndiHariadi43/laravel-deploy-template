@@ -2,7 +2,7 @@
 
 [![Laravel CI (Lite)](https://github.com/EndiHariadi43/laravel-deploy-template/actions/workflows/laravel-deploy-lite.yml/badge.svg)](https://github.com/EndiHariadi43/laravel-deploy-template/actions)
 
-A production-friendly **Lite** Laravel CI/CD Lite template with GitHub Actions.  
+A production-friendly Laravel CI/CD **Lite** template with GitHub Actions.  
 Upgrade to Premium for deploy workflows & alerts.
 
 ## ✨ What you get (Lite)
