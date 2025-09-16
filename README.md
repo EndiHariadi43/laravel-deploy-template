@@ -1,11 +1,9 @@
 # Laravel Deploy Template — Lite
 
+[![Laravel CI (Lite)](https://github.com/EndiHariadi43/laravel-deploy-template/actions/workflows/laravel-deploy-lite.yml/badge.svg)](https://github.com/EndiHariadi43/laravel-deploy-template/actions)
 
-[![Sponsor @EndiHariadi43](https://img.shields.io/badge/Sponsor-@EndiHariadi43-ff69b4?logo=github)](https://github.com/sponsors/EndiHariadi43)
-
-
-A production-friendly **Lite** CI for Laravel. Upgrade to **Premium** for deploy & operations.
-
+A production-friendly **Lite** Laravel CI/CD Lite template with GitHub Actions.  
+Upgrade to Premium for deploy workflows & alerts.
 
 ## ✨ What you get (Lite)
 - Composer cache, test run, optional frontend build
