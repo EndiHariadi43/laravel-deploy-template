@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  build-and-test:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +22,9 @@ jobs:
           php-version: '8.2'
           coverage: none
 
+      # Hanya cache composer kalau ada composer.json
       - name: Cache Composer
+        if: hashFiles('**/composer.json') != ''
         uses: actions/cache@v4
         with:
           path: ~/.composer/cache/files
@@ -30,24 +32,39 @@ jobs:
           restore-keys: |
             composer-${{ runner.os }}-
 
+      # Hanya install dependencies kalau ada composer.json
       - name: Install Dependencies (prod-like)
+        if: hashFiles('**/composer.json') != ''
         run: composer install --no-interaction --prefer-dist --no-progress --no-dev --optimize-autoloader
 
-      - name: Generate app key (if needed)
+      # Langkah khusus Laravel — hanya jalan kalau ada artisan
+      - name: Generate app key (if Laravel)
+        if: hashFiles('**/artisan') != ''
         run: |
-          php -r "if(!file_exists('.env')) copy('.env.example','.env');"
+          php -r "if(!file_exists('.env') && file_exists('.env.example')) copy('.env.example','.env');"
           php artisan key:generate --no-interaction || true
 
-      - name: Run Tests
-        run: php artisan test --no-interaction || vendor/bin/phpunit --colors=always || true
-
-      - name: Build Frontend (optional)
-        if: ${{ hashFiles('package.json') != '' }}
+      # Jalankan test hanya bila ada composer.json (project PHP/Laravel)
+      - name: Run Tests (if available)
+        if: hashFiles('**/composer.json') != ''
         run: |
-          npm ci || pnpm i || yarn
-          npm run build || yarn build || pnpm build || true
+          if [ -f artisan ]; then
+            php artisan test --no-interaction || true
+          elif [ -f vendor/bin/phpunit ]; then
+            vendor/bin/phpunit --colors=always || true
+          else
+            echo "No test runner found, skipping."
+          fi
 
-      - name: Artifact (for preview checks)
+      # Build frontend hanya jika ada package.json
+      - name: Build Frontend (optional)
+        if: hashFiles('**/package.json') != ''
+        run: |
+          (npm ci || pnpm i || yarn) || true
+          (npm run build || pnpm build || yarn build) || true
+
+      # Upload artifact tapi abaikan jika tidak ada file
+      - name: Artifacts (ignore if missing)
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -56,6 +73,7 @@ jobs:
             vendor
             public/build
             bootstrap/cache
+          if-no-files-found: ignore
 
       - name: 💎 Upgrade to Premium for Deploy + Alerts
         run: |
