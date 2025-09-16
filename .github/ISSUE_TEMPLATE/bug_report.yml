@@ -1,0 +1,16 @@
+name: Bug report
+description: Report an issue to help us improve
+labels: [bug]
+body:
+- type: textarea
+id: what-happened
+attributes:
+label: What happened?
+description: Also tell us what you expected to happen
+validations:
+required: true
+- type: input
+id: version
+attributes:
+label: Template version
+placeholder: e.g. v1.0.0
