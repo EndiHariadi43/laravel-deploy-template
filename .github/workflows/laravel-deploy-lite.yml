@@ -1,76 +1,64 @@
 name: Laravel CI (Lite)
 
-
 on:
-push:
-branches: [ "main" ]
-workflow_dispatch:
-
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
 
 permissions:
-contents: read
-
+  contents: read
 
 jobs:
-build-and-test:
-runs-on: ubuntu-latest
+  build-and-test:
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-steps:
-- name: Checkout
-uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
 
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            composer-${{ runner.os }}-
 
-- name: Setup PHP
-uses: shivammathur/setup-php@v2
-with:
-php-version: '8.2'
-coverage: none
+      - name: Install Dependencies (prod-like)
+        run: composer install --no-interaction --prefer-dist --no-progress --no-dev --optimize-autoloader
 
+      - name: Generate app key (if needed)
+        run: |
+          php -r "if(!file_exists('.env')) copy('.env.example','.env');"
+          php artisan key:generate --no-interaction || true
 
-- name: Cache Composer
-uses: actions/cache@v4
-with:
-path: ~/.composer/cache/files
-key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-restore-keys: |
-composer-${{ runner.os }}-
+      - name: Run Tests
+        run: php artisan test --no-interaction || vendor/bin/phpunit --colors=always || true
 
+      - name: Build Frontend (optional)
+        if: ${{ hashFiles('package.json') != '' }}
+        run: |
+          npm ci || pnpm i || yarn
+          npm run build || yarn build || pnpm build || true
 
-- name: Install Dependencies (prod-like)
-run: composer install --no-interaction --prefer-dist --no-progress --no-dev --optimize-autoloader
+      - name: Artifact (for preview checks)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            vendor
+            public/build
+            bootstrap/cache
 
-
-- name: Generate app key (if needed)
-run: |
-php -r "if(!file_exists('.env')) copy('.env.example','.env');"
-php artisan key:generate --no-interaction || true
-
-
-- name: Run Tests
-run: php artisan test --no-interaction || vendor/bin/phpunit --colors=always || true
-
-
-- name: Build Frontend (optional)
-if: ${{ hashFiles('package.json') != '' }}
-run: |
-npm ci || pnpm i || yarn
-npm run build || yarn build || pnpm build || true
-
-
-- name: Artifact (for preview checks)
-if: always()
-uses: actions/upload-artifact@v4
-with:
-name: build-artifacts
-path: |
-vendor
-public/build
-bootstrap/cache
-
-
-- name: 💎 Upgrade to Premium for Deploy + Alerts
-run: |
-echo "This is the LITE edition."
-echo "Premium adds: SSH/Rsync/Deployer, zero-downtime, .env templating, Telegram/Slack alerts, rollbacks, multi-env."
-echo "➡ https://github.com/sponsors/EndiHariadi43 or buy the PRO pack (link in README)."
+      - name: 💎 Upgrade to Premium for Deploy + Alerts
+        run: |
+          echo "This is the LITE edition."
+          echo "Premium adds: SSH/Rsync/Deployer, zero-downtime, .env templating, Telegram/Slack alerts, rollbacks, multi-env."
+          echo "➡ https://github.com/sponsors/EndiHariadi43"
