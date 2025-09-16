@@ -69,6 +69,11 @@ git push
 ## 📦 Using as Template
 Click **Use this template** to bootstrap your repo.
 
+---
+
+👉 See [INSTALLATION.md](./INSTALLATION.md) for full setup guide.
+
+---
 
 ## 📝 License
 Apache-2.0 © 2025 Endi Hariadi
